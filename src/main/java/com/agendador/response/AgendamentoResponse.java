@@ -19,6 +19,9 @@ public class AgendamentoResponse {
         this.message = "Transação registrada com sucesso";
     }
 
-    
+    public AgendamentoResponse(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 
 }

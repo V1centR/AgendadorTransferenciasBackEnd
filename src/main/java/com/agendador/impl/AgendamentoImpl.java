@@ -24,11 +24,23 @@ public class AgendamentoImpl implements AgendamentoService{
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
 	private double taxRateApply;
+	private boolean blockTransaction;
 	
 	@Override
 	public AgendamentoResponse createAgendamento(Agendamento postData) {
 	 
 		double taxRate = calculateTaxRate(postData.getDataTransferencia());
+		
+		String messageTax = "Taxa 0 não aplicável";
+		String message50Days = "Transações +50 dias não podem ser registradas";
+		
+		if (this.blockTransaction) {
+	        return new AgendamentoResponse("blocked", message50Days);
+	    }
+	    
+	    if (this.taxRateApply == 0.0) {
+	        return new AgendamentoResponse("blocked", messageTax);
+	    }
 
 	    postData.setDataRegistro(dateStampNow());
 	    postData.setTaxaAplicavel(taxRate);
@@ -86,6 +98,8 @@ public class AgendamentoImpl implements AgendamentoService{
                 : (diferencaDias >= 31 && diferencaDias <= 40) ? 4.7
                 : (diferencaDias >= 41 && diferencaDias <= 50) ? 1.7
                 : 0.0;
+        
+        this.blockTransaction = diferencaDias > 50;
 
         return this.taxRateApply;
     }
