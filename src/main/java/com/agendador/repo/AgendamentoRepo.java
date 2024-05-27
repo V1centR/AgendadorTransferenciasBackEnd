@@ -13,5 +13,6 @@ public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
 	@Query(value="SELECT * FROM AGENDAMENTO WHERE DATAREGISTRO = :today ORDER BY ID DESC",nativeQuery = true)
 	List<Agendamento> findToday(String today);
 	
-	
+	@Query(value="SELECT * FROM AGENDAMENTO WHERE DATAREGISTRO BETWEEN :startDate AND :endDate",nativeQuery = true)
+	List<Agendamento> findByRangeDate(String startDate, String endDate);
 }

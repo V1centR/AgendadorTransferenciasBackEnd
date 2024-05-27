@@ -39,8 +39,7 @@ public class AgendamentoImpl implements AgendamentoService{
 
 	@Override
 	public List<Agendamento> findByRangeDate(String startDate, String endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByRangeDate(startDate, endDate);
 	}
 
 	@Override
