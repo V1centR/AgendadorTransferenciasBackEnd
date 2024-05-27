@@ -8,5 +8,5 @@ import com.agendador.entities.Agendamento;
 @Repository
 public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
 	
-
+	
 }
