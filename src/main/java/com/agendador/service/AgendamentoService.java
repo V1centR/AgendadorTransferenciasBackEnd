@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.agendador.entities.Agendamento;
+import com.agendador.response.AgendamentoResponse;
 
 
 @Component
@@ -21,5 +22,7 @@ public interface AgendamentoService {
     Agendamento getAgendamentoById(long agendamentoId);
     
     void deleteAgendamento(Integer id);
+
+	AgendamentoResponse createAgendamento(Agendamento postData);
 
 }

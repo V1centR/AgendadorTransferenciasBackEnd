@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.agendador.entities.Agendamento;
 import com.agendador.repo.AgendamentoRepo;
+import com.agendador.response.AgendamentoResponse;
 import com.agendador.service.AgendamentoService;
 
 
@@ -18,7 +19,19 @@ public class AgendamentoImpl implements AgendamentoService{
 	@Autowired
 	AgendamentoRepo repository;
 	
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	
+	@Override
+	public AgendamentoResponse createAgendamento(Agendamento postData) {
+	 
+
+	    postData.setDataRegistro(dateStampNow());
+	    postData.setTaxaAplicavel(1.0);
+	    postData.setStatus("AP");
+
+	    Agendamento savedAgendamento = repository.save(postData);
+	    return new AgendamentoResponse(savedAgendamento);
+	}
 
 	@Override
 	public Agendamento updateAgendamento(Agendamento agendamento) {
