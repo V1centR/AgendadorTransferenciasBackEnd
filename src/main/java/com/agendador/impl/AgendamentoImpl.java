@@ -1,7 +1,9 @@
 package com.agendador.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,15 @@ public class AgendamentoImpl implements AgendamentoService{
 	
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
+	private double taxRateApply;
+	
 	@Override
 	public AgendamentoResponse createAgendamento(Agendamento postData) {
 	 
+		double taxRate = calculateTaxRate(postData.getDataTransferencia());
 
 	    postData.setDataRegistro(dateStampNow());
-	    postData.setTaxaAplicavel(1.0);
+	    postData.setTaxaAplicavel(taxRate);
 	    postData.setStatus("AP");
 
 	    Agendamento savedAgendamento = repository.save(postData);
@@ -66,6 +71,24 @@ public class AgendamentoImpl implements AgendamentoService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public double calculateTaxRate(String inputDate) {
+
+        LocalDate providedDate = LocalDate.parse(inputDate, dtf);
+        LocalDate currentDate = LocalDate.now();
+
+        long diferencaDias = ChronoUnit.DAYS.between(currentDate,providedDate);
+
+        this.taxRateApply = (diferencaDias == 0) ? 2.5
+                : (diferencaDias >= 1 && diferencaDias <= 10) ? 0.0
+                : (diferencaDias >= 11 && diferencaDias <= 20) ? 8.2
+                : (diferencaDias >= 21 && diferencaDias <= 30) ? 6.9
+                : (diferencaDias >= 31 && diferencaDias <= 40) ? 4.7
+                : (diferencaDias >= 41 && diferencaDias <= 50) ? 1.7
+                : 0.0;
+
+        return this.taxRateApply;
+    }
 	
 	private String dateStampNow() {
 		LocalDateTime now = LocalDateTime.now();
