@@ -1,5 +1,7 @@
 package com.agendador.impl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class AgendamentoImpl implements AgendamentoService{
 
 	@Autowired
 	AgendamentoRepo repository;
+	
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
 
 	@Override
 	public Agendamento updateAgendamento(Agendamento agendamento) {
@@ -30,8 +34,7 @@ public class AgendamentoImpl implements AgendamentoService{
 
 	@Override
 	public List<Agendamento> getTodayAgendamento() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findToday(dateStampNow());
 	}
 
 	@Override
@@ -50,6 +53,11 @@ public class AgendamentoImpl implements AgendamentoService{
 	public void deleteAgendamento(Integer id) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private String dateStampNow() {
+		LocalDateTime now = LocalDateTime.now();
+		return dtf.format(now);
 	}
 	
 	
